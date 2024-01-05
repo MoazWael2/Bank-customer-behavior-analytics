@@ -145,4 +145,34 @@ GROUP BY
 ##### Finding 
 * The analysis of the payment methods used for transactions reveals a clear preference among customers, with credit cards being the predominant choice, accounting for 40.54% of total spending. This preference indicates a significant reliance on credit cards over other payment forms like UPI (Unified Payments Interface), Debit Cards, and Net Banking. This trend suggests a strong potential for targeted credit card promotions and loyalty programs to further encourage and reward credit card usage
 
+# Part 2: In-Depth Customer Behavior Analysis
+
+### 1- How do spending habits vary across different age groups?
+##### SQL
+```SQL
+SELECT 
+  C.age_group, -- The age group of the customer
+  MIN(F.spend) AS Min_Spend, -- The smallest transaction amount in the age group
+  AVG(F.spend) AS AVG_SPEND, -- The average transaction amount in the age group
+  MAX(F.spend) AS MAX_SPEND, -- The largest transaction amount in the age group
+  ROUND(AVG(F.spend / C.avg_income) * 100, 2) AS Avg_income_utilisation -- The average spend as a percentage of average income
+FROM 
+  dim_customers AS C -- Customer demographics table
+INNER JOIN 
+  fact_spends AS F ON C.customer_id = F.customer_id -- Transaction data table
+GROUP BY 
+  C.age_group -- Grouping data by customer age group
+ORDER BY 
+  C.age_group; -- Sorting the results by age group
+```
+##### Result 
+![Income with ages](https://github.com/MoazWael2/Bank-customer-behavior-analytics/assets/137816418/b88f54f1-e6e8-4480-8151-c519cfb5f44d)
+
+##### Finding 
+* An insightful pattern emerges when analyzing the average income utilization in relation to age groups. Individuals aged 35-45 show the highest income utilization at 29%, suggesting a greater propensity to spend relative to their income. This is closely followed by the 25-34 age bracket at 22% and the 21-24 group at 13%. Notably, the age group of 45+ appears to have a more stable financial footing, with a lower and more conservative income utilization.
+
+* This trend indicates that the 35-45 age group may be more receptive to credit card offers and could potentially benefit from tailored financial products. On the other hand, the 45+ demographic exhibits spending habits that suggest financial stability and possibly a higher ability to spend without relying on credit.
+
+
+
 
