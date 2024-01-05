@@ -127,3 +127,22 @@ ORDER BY
 
 ##### Finding 
 * analysis of monthly spending by category demonstrates a consistent trend where 'Bills' category dominates across all months. Notably, a significant increase in 'Travel' spending is observed from August to September, aligning with the summer season, which typically sees a surge in travel activity. This seasonal uptick suggests opportunities for targeted travel-related promotions and partnerships during these peak months to capitalize on the increased spending behavior.
+
+### Are there significant differences in spending between payment methods ? 
+##### SQL
+```SQL
+SELECT 
+  payment_type, -- The method of payment used
+  SUM(spend) AS Total_spending -- The total spending for each payment method
+FROM 
+  fact_spends -- Replace with your actual table name containing spend data
+GROUP BY 
+  payment_type; -- Grouping results by payment method
+```
+##### Result
+![05 01 2024_14 41 07_REC](https://github.com/MoazWael2/Bank-customer-behavior-analytics/assets/137816418/24caef9f-149c-4094-8515-63908a758a93)
+
+##### Finding 
+* The analysis of the payment methods used for transactions reveals a clear preference among customers, with credit cards being the predominant choice, accounting for 40.54% of total spending. This preference indicates a significant reliance on credit cards over other payment forms like UPI (Unified Payments Interface), Debit Cards, and Net Banking. This trend suggests a strong potential for targeted credit card promotions and loyalty programs to further encourage and reward credit card usage
+
+
