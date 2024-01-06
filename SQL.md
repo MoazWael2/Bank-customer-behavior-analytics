@@ -173,6 +173,57 @@ ORDER BY
 
 * This trend indicates that the 35-45 age group may be more receptive to credit card offers and could potentially benefit from tailored financial products. On the other hand, the 45+ demographic exhibits spending habits that suggest financial stability and possibly a higher ability to spend without relying on credit.
 
+### 2- Are higher-income customers more likely to engage in certain types of transactions?
+##### SQL
+```SQL
+SELECT 
+  C.occupation, -- Occupation of the customer
+  F.category, -- Spending category
+  AVG(F.spend) AS AVG_SPEND, -- Average spend amount within the category for the occupation
+  MAX(F.spend) AS MAX_SPEND, -- Maximum spend amount within the category for the occupation
+  SUM(F.spend) AS Total_Spend -- Total spend amount within the category for the occupation
+FROM 
+  dim_customers AS C -- Customers dimension table with demographics
+INNER JOIN 
+  fact_spends AS F ON C.customer_id = F.customer_id -- Transaction data table
+GROUP BY 
+  C.occupation, F.category -- Grouping data by occupation and category
+ORDER BY 
+  C.occupation, Total_Spend DESC; -- Sorting the results by occupation and total spend
+```
+### Result
+![05 01 2024_20 59 58_REC](https://github.com/MoazWael2/Bank-customer-behavior-analytics/assets/137816418/5f96d986-a8ca-44fa-bc9c-8064d658c5ec)
+
+### Finding 
+* A review of the spending data across different occupations reveals a common pattern: most occupational groups tend to spend the most on bills. This consistency suggests that there is no strong correlation between occupation type and spending behavior in different categories, at least for essential services and needs. While there are peaks in spending within categories such as electronics and apparel, these do not appear to be significantly influenced by the occupation of the customers.
+
+### 3- Correlation Analysis Between Income Level and Transaction Types?
+##### SQL
+```SQL
+SELECT 
+  CASE 
+    WHEN C.avg_income BETWEEN 24000 AND 52000 THEN '24K - 52K' 
+    WHEN C.avg_income BETWEEN 52001 AND 66000 THEN '52K - 66K' 
+    WHEN C.avg_income > 66000 THEN '66K+' 
+  END AS Income_classification, -- Income classification based on average income
+  F.payment_type, -- The type of payment used in transactions
+  COUNT(F.payment_type) AS Total_used, -- Total count of each payment type used
+  SUM(F.spend) AS Total_spend -- Total spend for each payment type
+FROM 
+  fact_spends AS F -- Transaction data table
+INNER JOIN 
+  dim_customers AS C ON C.customer_id = F.customer_id -- Customer demographics table
+GROUP BY 
+  Income_classification, F.payment_type -- Grouping results by income classification and payment type
+ORDER BY 
+  Income_classification, Total_spend DESC; -- Ordering results by income classification and total spend
+```
+##### Result
+![05 01 2024_21 33 29_REC](https://github.com/MoazWael2/Bank-customer-behavior-analytics/assets/137816418/5a232553-6d14-4d34-a827-b5f75baddd01)
+
+##### Finding 
+* An analysis of transaction types across different income brackets reveals a counterintuitive trend: higher-income customers (66K - 87K range) appear to use credit cards less frequently than other payment methods, with credit card usage ranking lowest in their payment preferences. This contrasts with the commonly held view that higher-income individuals might prefer credit cards due to potential benefits like rewards or credit points.
+
 
 
 
